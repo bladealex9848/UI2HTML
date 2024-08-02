@@ -4,13 +4,13 @@
 
 ## Descripción
 
-UI2HTML es una herramienta innovadora que convierte imágenes de interfaces de usuario en código HTML. Utilizando la API de Gemini, esta aplicación analiza y describe detalladamente la interfaz de usuario y genera el código HTML correspondiente, asegurando que el diseño sea receptivo y fiel al original.
+UI2HTML es una herramienta innovadora que convierte imágenes de interfaces de usuario en código HTML. Utilizando la API de OpenAI, esta aplicación analiza y describe detalladamente la interfaz de usuario y genera el código HTML correspondiente, asegurando que el diseño sea receptivo y fiel al original.
 
 ## Introducción
 
-Con UI2HTML, puedes transformar imágenes de interfaces de usuario en código HTML de manera sencilla y eficiente. La aplicación utiliza la API de Gemini para analizar y describir la interfaz de usuario, generando un código HTML preciso y estilizado. Para desarrollar esta aplicación necesitaremos:
+Con UI2HTML, puedes transformar imágenes de interfaces de usuario en código HTML de manera sencilla y eficiente. La aplicación utiliza la API de OpenAI para analizar y describir la interfaz de usuario, generando un código HTML preciso y estilizado. Para desarrollar esta aplicación necesitaremos:
 
-- API de Gemini
+- API de OpenAI
 - Streamlit
 
 ## ¿Cómo funciona?
