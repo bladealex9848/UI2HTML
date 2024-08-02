@@ -29,6 +29,9 @@ Thumbs.db
 *.tmp
 *.bak
 *.swp
+*.jpg
+temp_image.jpg
+index.html
 *~
 
 # Archivos de base de datos
