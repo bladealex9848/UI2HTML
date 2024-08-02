@@ -1,4 +1,4 @@
-![Logo de UI2HTML](https://raw.githubusercontent.com/bladealex9848/UI2HTML/main/img/logo.jpg)
+![Logo de UI2HTML](https://github.com/bladealex9848/UI2HTM/blob/main/logo.jpg)
 
 # UI2HTML: Convierte Interfaces en Código
 
