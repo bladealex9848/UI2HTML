@@ -3,6 +3,8 @@ import pathlib
 from PIL import Image
 from openai import OpenAI
 import base64
+import zipfile
+import os
 
 # Cargar API Key
 API_KEY = st.secrets.get('OPENAI_API_KEY')
@@ -93,12 +95,39 @@ def main():
                 st.code(refined_html, language='html')
 
                 # Guardar el HTML refinado en un archivo
-                with open("index.html", "w") as file:
+                with open("index.html", "w", encoding="utf-8") as file:
                     file.write(refined_html)
-                st.success("Se ha creado el archivo HTML 'index.html'.")
 
-                # Proporcionar enlace de descarga para HTML
-                st.download_button(label="Descargar HTML", data=refined_html, file_name="index.html", mime="text/html")
+                # Crear archivo de texto con todo el texto generado
+                with open("proceso.txt", "w", encoding="utf-8") as file:
+                    file.write(f"Descripción inicial:\n{description}\n\n")
+                    file.write(f"Descripción refinada:\n{refined_description}\n\n")
+                    file.write(f"HTML inicial:\n{initial_html}\n\n")
+                    file.write(f"HTML refinado:\n{refined_html}\n")
+
+                # Crear archivo zip
+                with zipfile.ZipFile("ui_to_code_output.zip", "w") as zipf:
+                    zipf.write("index.html")
+                    zipf.write("temp_image.jpg")
+                    zipf.write("proceso.txt")
+
+                # Proporcionar enlace de descarga para el archivo ZIP
+                with open("ui_to_code_output.zip", "rb") as f:
+                    st.download_button(
+                        label="Descargar ZIP con HTML, imagen y proceso",
+                        data=f,
+                        file_name="ui_to_code_output.zip",
+                        mime="application/zip"
+                    )
+
+                # Eliminar archivos temporales
+                os.remove("index.html")
+                os.remove("temp_image.jpg")
+                os.remove("proceso.txt")
+                os.remove("ui_to_code_output.zip")
+
+                st.success("Se ha creado y descargado el archivo ZIP con todos los elementos.")
+
         except Exception as e:
             st.error(f"Ocurrió un error: {e}")
 
