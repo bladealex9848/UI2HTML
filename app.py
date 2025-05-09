@@ -59,7 +59,7 @@ def main():
         try:
             # Cargar y mostrar la imagen
             image = Image.open(uploaded_file)
-            st.image(image, caption='Imagen subida.', use_column_width=True)
+            st.image(image, caption='Imagen subida.', use_container_width=True)
 
             # Convertir la imagen al modo RGB si tiene un canal alfa
             if image.mode == 'RGBA':
