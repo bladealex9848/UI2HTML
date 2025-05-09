@@ -43,7 +43,47 @@ def send_message_to_model(message, image_path):
         ],
         max_tokens=4096
     )
-    return response.choices[0].message.content
+    content = response.choices[0].message.content
+    # Eliminar etiquetas de markdown si están presentes
+    # Caso 1: ```html al inicio y ``` al final (con posibles espacios o saltos de línea)
+    if content.strip().startswith("```html") and content.strip().endswith("```"):
+        content = content.strip()[7:].strip()
+        if content.endswith("```"):
+            content = content[:-3].strip()
+    # Caso 2: ``` al inicio y ``` al final (con posibles espacios o saltos de línea)
+    elif content.strip().startswith("```") and content.strip().endswith("```"):
+        content = content.strip()[3:].strip()
+        if content.endswith("```"):
+            content = content[:-3].strip()
+    # Caso 3: Si comienza con <!DOCTYPE html> pero tiene etiquetas markdown
+    elif "<!DOCTYPE html>" in content and ("```" in content or "```html" in content):
+        # Intentar extraer solo el HTML
+        import re
+        html_match = re.search(r'<!DOCTYPE html>[\s\S]*?</html>', content)
+        if html_match:
+            content = html_match.group(0)
+    return content
+
+# Función para limpiar el HTML de etiquetas markdown
+def clean_html(html_content):
+    # Eliminar etiquetas markdown al inicio
+    if html_content.strip().startswith("```html"):
+        html_content = html_content.strip()[7:].strip()
+    elif html_content.strip().startswith("```"):
+        html_content = html_content.strip()[3:].strip()
+
+    # Eliminar etiquetas markdown al final
+    if html_content.strip().endswith("```"):
+        html_content = html_content.strip()[:-3].strip()
+
+    # Si hay etiquetas markdown en medio, intentar extraer solo el HTML
+    if "```" in html_content and "<!DOCTYPE html>" in html_content:
+        import re
+        html_match = re.search(r'<!DOCTYPE html>[\s\S]*?</html>', html_content)
+        if html_match:
+            html_content = html_match.group(0)
+
+    return html_content
 
 # Framework selection
 framework = "Bootstrap"  # Cambia esto a "Bootstrap" u otro framework según sea necesario
@@ -86,24 +126,26 @@ def main():
                 st.write("🛠️ Generando sitio web...")
                 html_prompt = f"Crea un archivo HTML basado en la siguiente descripción de la interfaz de usuario, utilizando los elementos de la interfaz de usuario descritos en la respuesta anterior. Incluye CSS de {framework} dentro del archivo HTML para dar estilo a los elementos. Asegúrate de que los colores utilizados sean los mismos que los de la interfaz de usuario original. La interfaz de usuario debe ser receptiva y estar diseñada para dispositivos móviles, coincidiendo lo más posible con la interfaz de usuario original. No incluyas explicaciones ni comentarios. SOLO devuelve el código HTML con CSS en línea. Aquí tienes la descripción refinada: {refined_description}"
                 initial_html = send_message_to_model(html_prompt, temp_image_path)
-                st.code(initial_html, language='html')
+                clean_initial_html = clean_html(initial_html)
+                st.code(clean_initial_html, language='html')
 
                 # Refinar HTML
                 st.write("🔧 Refinando sitio web...")
                 refine_html_prompt = f"Valida el siguiente código HTML basado en la descripción de la interfaz de usuario y la imagen y proporciona una versión refinada del código HTML con CSS de {framework} que mejore la precisión, la capacidad de respuesta y la fidelidad al diseño original. SOLO devuelve el código HTML refinado con CSS en línea. Aquí tienes el HTML inicial: {initial_html}"
                 refined_html = send_message_to_model(refine_html_prompt, temp_image_path)
-                st.code(refined_html, language='html')
+                clean_refined_html = clean_html(refined_html)
+                st.code(clean_refined_html, language='html')
 
                 # Guardar el HTML refinado en un archivo
                 with open("index.html", "w", encoding="utf-8") as file:
-                    file.write(refined_html)
+                    file.write(clean_refined_html)
 
                 # Crear archivo de texto con todo el texto generado
                 with open("proceso.txt", "w", encoding="utf-8") as file:
                     file.write(f"Descripción inicial:\n{description}\n\n")
                     file.write(f"Descripción refinada:\n{refined_description}\n\n")
-                    file.write(f"HTML inicial:\n{initial_html}\n\n")
-                    file.write(f"HTML refinado:\n{refined_html}\n")
+                    file.write(f"HTML inicial:\n{clean_initial_html}\n\n")
+                    file.write(f"HTML refinado:\n{clean_refined_html}\n")
 
                 # Crear archivo zip
                 with zipfile.ZipFile("ui_to_code_output.zip", "w") as zipf:
