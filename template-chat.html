@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interfaz de Chat</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- DaisyUI CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
+  
+  <!-- Configuración de Tailwind y DaisyUI -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+              950: '#082f49',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+      plugins: [require("daisyui")],
+      daisyui: {
+        themes: ["light", "dark", "cupcake", "corporate"],
+      },
+    }
+  </script>
+  
+  <!-- Fuente Inter -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Estilos personalizados -->
+  <style>
+    /* Variables CSS para temas */
+    :root {
+      --background: #f8f9fa;
+      --foreground: #1f2937;
+      --card: #ffffff;
+      --card-foreground: #1f2937;
+      --primary: #0ea5e9;
+      --primary-foreground: #ffffff;
+      --secondary: #f3f4f6;
+      --secondary-foreground: #1f2937;
+      --accent: #f3f4f6;
+      --accent-foreground: #1f2937;
+      --destructive: #ef4444;
+      --destructive-foreground: #ffffff;
+      --border: #e5e7eb;
+      --input: #e5e7eb;
+      --ring: #0ea5e9;
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: #111827;
+      --foreground: #f9fafb;
+      --card: #1f2937;
+      --card-foreground: #f9fafb;
+      --primary: #0ea5e9;
+      --primary-foreground: #ffffff;
+      --secondary: #374151;
+      --secondary-foreground: #f9fafb;
+      --accent: #374151;
+      --accent-foreground: #f9fafb;
+      --destructive: #ef4444;
+      --destructive-foreground: #ffffff;
+      --border: #374151;
+      --input: #374151;
+      --ring: #0ea5e9;
+    }
+    
+    /* Estilos base */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--foreground);
+    }
+    
+    /* Estilos para mensajes de chat */
+    .message {
+      max-width: 80%;
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      position: relative;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    .message-user {
+      background-color: var(--primary);
+      color: var(--primary-foreground);
+      border-bottom-right-radius: 0.25rem;
+      margin-left: auto;
+    }
+    
+    .message-assistant {
+      background-color: var(--card);
+      color: var(--card-foreground);
+      border-bottom-left-radius: 0.25rem;
+      margin-right: auto;
+    }
+    
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .typing-indicator {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 0.5rem;
+    }
+    
+    .typing-indicator span {
+      height: 8px;
+      width: 8px;
+      background-color: var(--primary);
+      border-radius: 50%;
+      display: inline-block;
+      margin: 0 1px;
+      opacity: 0.6;
+    }
+    
+    .typing-indicator span:nth-child(1) {
+      animation: bounce 1s infinite 0.1s;
+    }
+    
+    .typing-indicator span:nth-child(2) {
+      animation: bounce 1s infinite 0.2s;
+    }
+    
+    .typing-indicator span:nth-child(3) {
+      animation: bounce 1s infinite 0.3s;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Contenedor principal -->
+  <div class="min-h-screen flex flex-col">
+    
+    <!-- Barra de navegación -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl font-bold text-primary-600 dark:text-primary-400">Chat AI</span>
+        </div>
+        <div class="flex items-center space-x-3">
+          <!-- Botón de tema oscuro/claro -->
+          <button id="theme-toggle" class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </button>
+          <!-- Menú de usuario -->
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+              <div class="w-10 rounded-full">
+                <img alt="Avatar" src="https://ui-avatars.com/api/?name=Usuario&background=0D8ABC&color=fff" />
+              </div>
+            </div>
+            <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+              <li><a>Perfil</a></li>
+              <li><a>Configuración</a></li>
+              <li><a>Cerrar sesión</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Contenido principal -->
+    <main class="flex-grow container mx-auto px-4 py-4 flex flex-col md:flex-row gap-4">
+      <!-- Barra lateral (categorías/conversaciones) -->
+      <aside class="w-full md:w-64 shrink-0 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+        <div class="mb-4">
+          <button class="btn btn-primary w-full">Nueva conversación</button>
+        </div>
+        <div class="space-y-1">
+          <h3 class="font-medium text-sm text-gray-500 dark:text-gray-400 px-3 py-2">Conversaciones recientes</h3>
+          <div class="space-y-1">
+            <a href="#" class="flex items-center px-3 py-2 rounded-md bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              Conversación actual
+            </a>
+            <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              Desarrollo web
+            </a>
+            <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              Investigación en profundidad
+            </a>
+            <a href="#" class="flex items-center px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              Generación de imágenes
+            </a>
+          </div>
+        </div>
+      </aside>
+      
+      <!-- Área de chat -->
+      <div class="flex-grow flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+        <!-- Historial de mensajes -->
+        <div class="flex-grow p-4 overflow-y-auto" id="chat-messages">
+          <!-- Mensaje del asistente -->
+          <div class="message message-assistant">
+            <p>Hola, soy un asistente virtual. ¿En qué puedo ayudarte hoy?</p>
+          </div>
+          
+          <!-- Mensaje del usuario -->
+          <div class="message message-user">
+            <p>Hola, ¿puedes ayudarme con una pregunta sobre desarrollo web?</p>
+          </div>
+          
+          <!-- Mensaje del asistente -->
+          <div class="message message-assistant">
+            <p>¡Claro! Estoy aquí para ayudarte con cualquier pregunta sobre desarrollo web. ¿Qué te gustaría saber específicamente? Puedo ayudarte con HTML, CSS, JavaScript, frameworks como React o Vue, backend con Node.js, bases de datos, y mucho más.</p>
+          </div>
+          
+          <!-- Indicador de escritura -->
+          <div class="message message-assistant" style="padding: 0.5rem 1rem;">
+            <div class="typing-indicator">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Área de entrada de mensaje -->
+        <div class="border-t border-gray-200 dark:border-gray-700 p-4">
+          <div class="flex items-center space-x-2">
+            <button class="btn btn-circle btn-ghost">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+              </svg>
+            </button>
+            <input type="text" placeholder="Escribe un mensaje..." class="input input-bordered flex-grow" />
+            <button class="btn btn-circle btn-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </button>
+          </div>
+          <div class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
+            El asistente puede cometer errores. Verifica la información importante.
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Script para alternar entre modo claro y oscuro -->
+  <script>
+    // Verificar preferencia del sistema o configuración guardada
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
+    // Alternar tema al hacer clic en el botón
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+    });
+  </script>
+</body>
+</html>

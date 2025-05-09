@@ -1,0 +1,26 @@
+La imagen original muestra una interfaz de chat minimalista similar a ChatGPT con las siguientes características:
+
+- Barra superior con:
+  * Icono de menú/documento a la izquierda
+  * Texto "ChatGPT" con flecha desplegable
+  * Botón "Temporal" a la derecha
+  * Avatar de usuario circular en la esquina superior derecha
+
+- Mensaje central "¿En qué puedo ayudarte?"
+
+- Campo de entrada de texto en la parte inferior con:
+  * Placeholder "Pregunta lo que quieras"
+  * Botón "+" a la izquierda
+  * Botones de acción:
+    - "Buscar" (icono de globo terráqueo)
+    - "Razona" (icono de pensamiento)
+    - "Investigación en profundidad" (icono de documento)
+    - "Crea una imagen" (icono de imagen)
+    - Botón de menú con tres puntos
+  * Botón de micrófono a la derecha
+  * Botón de enviar (círculo negro con flecha blanca)
+
+- Diseño muy limpio y minimalista con fondo blanco y amplio espacio en blanco
+- Interfaz centrada en la pantalla con bordes redondeados en el campo de entrada
+
+Nota: Este archivo es un placeholder para la imagen original que se utilizaría en un caso real.

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interfaz Moderna</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- DaisyUI CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
+  
+  <!-- Iconos de Heroicons -->
+  <script src="https://unpkg.com/@heroicons/react/outline"></script>
+  
+  <!-- Configuración de Tailwind y DaisyUI -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+              950: '#082f49',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+      plugins: [require("daisyui")],
+      daisyui: {
+        themes: ["light", "dark", "cupcake", "corporate", "synthwave", "retro", "cyberpunk"],
+      },
+    }
+  </script>
+  
+  <!-- Fuente Inter -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  
+  <!-- Estilos personalizados -->
+  <style>
+    /* Variables CSS para temas */
+    :root {
+      --background: #ffffff;
+      --foreground: #1f2937;
+      --card: #ffffff;
+      --card-foreground: #1f2937;
+      --primary: #0ea5e9;
+      --primary-foreground: #ffffff;
+      --secondary: #f3f4f6;
+      --secondary-foreground: #1f2937;
+      --accent: #f3f4f6;
+      --accent-foreground: #1f2937;
+      --destructive: #ef4444;
+      --destructive-foreground: #ffffff;
+      --border: #e5e7eb;
+      --input: #e5e7eb;
+      --ring: #0ea5e9;
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: #1f2937;
+      --foreground: #f9fafb;
+      --card: #111827;
+      --card-foreground: #f9fafb;
+      --primary: #0ea5e9;
+      --primary-foreground: #ffffff;
+      --secondary: #374151;
+      --secondary-foreground: #f9fafb;
+      --accent: #374151;
+      --accent-foreground: #f9fafb;
+      --destructive: #ef4444;
+      --destructive-foreground: #ffffff;
+      --border: #374151;
+      --input: #374151;
+      --ring: #0ea5e9;
+    }
+    
+    /* Estilos base */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background);
+      color: var(--foreground);
+    }
+    
+    /* Utilidades personalizadas */
+    .card-hover {
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <!-- Contenedor principal -->
+  <div class="min-h-screen flex flex-col">
+    
+    <!-- Barra de navegación -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <span class="text-xl font-bold text-primary-600 dark:text-primary-400">Logo</span>
+        </div>
+        <nav class="hidden md:flex space-x-6">
+          <a href="#" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">Inicio</a>
+          <a href="#" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">Características</a>
+          <a href="#" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">Precios</a>
+          <a href="#" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">Contacto</a>
+        </nav>
+        <div class="flex items-center space-x-3">
+          <!-- Botón de tema oscuro/claro -->
+          <button id="theme-toggle" class="btn btn-ghost btn-circle">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </button>
+          <!-- Menú móvil -->
+          <button class="btn btn-ghost btn-circle md:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Contenido principal -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+      <!-- Área de contenido flexible - será reemplazada según la interfaz a generar -->
+      <div id="content-area" class="grid grid-cols-1 md:grid-cols-12 gap-6">
+        
+        <!-- Barra lateral (3 columnas en escritorio) -->
+        <aside class="md:col-span-3 space-y-6">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4">
+            <h3 class="font-medium text-lg mb-3">Navegación</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Opción 1</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Opción 2</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Opción 3</a></li>
+              <li><a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">Opción 4</a></li>
+            </ul>
+          </div>
+        </aside>
+        
+        <!-- Contenido principal (9 columnas en escritorio) -->
+        <div class="md:col-span-9 space-y-6">
+          <!-- Tarjeta de bienvenida -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+            <h1 class="text-2xl font-bold mb-2">Bienvenido a la Interfaz Moderna</h1>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Esta es una plantilla versátil que puede adaptarse a cualquier tipo de interfaz web.</p>
+            <div class="flex space-x-3">
+              <button class="btn btn-primary">Acción Principal</button>
+              <button class="btn btn-outline">Acción Secundaria</button>
+            </div>
+          </div>
+          
+          <!-- Tarjetas de características -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 card-hover">
+              <div class="text-primary-500 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <h3 class="font-semibold text-lg mb-2">Característica 1</h3>
+              <p class="text-gray-600 dark:text-gray-300">Descripción breve de la característica y sus beneficios para el usuario.</p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 card-hover">
+              <div class="text-primary-500 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <h3 class="font-semibold text-lg mb-2">Característica 2</h3>
+              <p class="text-gray-600 dark:text-gray-300">Descripción breve de la característica y sus beneficios para el usuario.</p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-5 card-hover">
+              <div class="text-primary-500 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <h3 class="font-semibold text-lg mb-2">Característica 3</h3>
+              <p class="text-gray-600 dark:text-gray-300">Descripción breve de la característica y sus beneficios para el usuario.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Pie de página -->
+    <footer class="bg-white dark:bg-gray-800 shadow-sm mt-auto">
+      <div class="container mx-auto px-4 py-6">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <p class="text-gray-600 dark:text-gray-300">&copy; 2024 Interfaz Moderna. Todos los derechos reservados.</p>
+          </div>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+              </svg>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+              </svg>
+            </a>
+            <a href="#" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Script para alternar entre modo claro y oscuro -->
+  <script>
+    // Verificar preferencia del sistema o configuración guardada
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
+    // Alternar tema al hacer clic en el botón
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+    });
+  </script>
+</body>
+</html>
