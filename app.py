@@ -24,9 +24,9 @@ client = OpenAI(api_key=API_KEY)
 def send_message_to_model(message, image_path):
     with open(image_path, "rb") as image_file:
         base64_image = base64.b64encode(image_file.read()).decode()
-    
+
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4.1-nano",
         messages=[
             {
                 "role": "user",
@@ -50,7 +50,7 @@ framework = "Bootstrap"  # Cambia esto a "Bootstrap" u otro framework según sea
 
 # Streamlit app
 def main():
-    st.title("GPT-4o Vision, UI a Código 👨‍💻")
+    st.title("GPT-4.1 Nano Vision, UI a Código 👨‍💻")
     st.subheader('Hecho con ❤️ by [Alexander](https://twitter.com/alexanderofadul)')
 
     uploaded_file = st.file_uploader("Selecciona una imagen de la interfaz de usuario para convertir en código HTML.", type=["jpg", "jpeg", "png"])
